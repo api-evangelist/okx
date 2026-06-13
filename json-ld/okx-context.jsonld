@@ -1,0 +1,228 @@
+{
+  "@context": {
+    "@vocab": "https://schema.org/",
+    "okx": "https://www.okx.com/vocab#",
+    "aid": "okx",
+
+    "Organization": "Organization",
+    "name": "name",
+    "description": "description",
+    "url": "url",
+    "logo": "logo",
+    "sameAs": "sameAs",
+
+    "WebAPI": "WebAPI",
+    "documentation": "documentation",
+    "termsOfService": "termsOfService",
+    "provider": "provider",
+    "endpointURL": "endpointURL",
+
+    "FinancialService": "FinancialService",
+    "CryptocurrencyExchange": {
+      "@id": "okx:CryptocurrencyExchange",
+      "@type": "@id"
+    },
+
+    "instrument": "instrument",
+    "spotTrading": {
+      "@id": "okx:spotTrading",
+      "@type": "@id"
+    },
+    "futuresTrading": {
+      "@id": "okx:futuresTrading",
+      "@type": "@id"
+    },
+    "optionsTrading": {
+      "@id": "okx:optionsTrading",
+      "@type": "@id"
+    },
+    "perpetualSwap": {
+      "@id": "okx:perpetualSwap",
+      "@type": "@id"
+    },
+    "marginTrading": {
+      "@id": "okx:marginTrading",
+      "@type": "@id"
+    },
+    "algoOrder": {
+      "@id": "okx:algoOrder",
+      "@type": "@id"
+    },
+    "blockTrading": {
+      "@id": "okx:blockTrading",
+      "@type": "@id"
+    },
+    "copyTrading": {
+      "@id": "okx:copyTrading",
+      "@type": "@id"
+    },
+    "spreadTrading": {
+      "@id": "okx:spreadTrading",
+      "@type": "@id"
+    },
+
+    "marketData": {
+      "@id": "okx:marketData",
+      "@type": "@id"
+    },
+    "orderBook": {
+      "@id": "okx:orderBook",
+      "@type": "@id"
+    },
+    "ticker": {
+      "@id": "okx:ticker",
+      "@type": "@id"
+    },
+    "candlestick": {
+      "@id": "okx:candlestick",
+      "@type": "@id"
+    },
+    "fundingRate": {
+      "@id": "okx:fundingRate",
+      "@type": "@id"
+    },
+    "openInterest": {
+      "@id": "okx:openInterest",
+      "@type": "@id"
+    },
+
+    "account": {
+      "@id": "okx:account",
+      "@type": "@id"
+    },
+    "balance": {
+      "@id": "okx:balance",
+      "@type": "@id"
+    },
+    "position": {
+      "@id": "okx:position",
+      "@type": "@id"
+    },
+    "leverage": {
+      "@id": "okx:leverage",
+      "@type": "@id"
+    },
+    "subAccount": {
+      "@id": "okx:subAccount",
+      "@type": "@id"
+    },
+
+    "funding": {
+      "@id": "okx:funding",
+      "@type": "@id"
+    },
+    "deposit": {
+      "@id": "okx:deposit",
+      "@type": "@id"
+    },
+    "withdrawal": {
+      "@id": "okx:withdrawal",
+      "@type": "@id"
+    },
+    "transfer": {
+      "@id": "okx:transfer",
+      "@type": "@id"
+    },
+
+    "earn": {
+      "@id": "okx:earn",
+      "@type": "@id"
+    },
+    "staking": {
+      "@id": "okx:staking",
+      "@type": "@id"
+    },
+    "lending": {
+      "@id": "okx:lending",
+      "@type": "@id"
+    },
+    "defi": {
+      "@id": "okx:defi",
+      "@type": "@id"
+    },
+
+    "web3Wallet": {
+      "@id": "okx:web3Wallet",
+      "@type": "@id"
+    },
+    "dexAggregation": {
+      "@id": "okx:dexAggregation",
+      "@type": "@id"
+    },
+    "multiChain": {
+      "@id": "okx:multiChain",
+      "@type": "@id"
+    },
+    "onChain": {
+      "@id": "okx:onChain",
+      "@type": "@id"
+    },
+
+    "authentication": {
+      "@id": "okx:authentication",
+      "@type": "@id"
+    },
+    "apiKey": {
+      "@id": "okx:apiKey",
+      "@type": "@id"
+    },
+    "hmacSha256": {
+      "@id": "okx:hmacSha256",
+      "@type": "@id"
+    },
+
+    "rateLimitWeight": {
+      "@id": "okx:rateLimitWeight",
+      "@type": "xsd:integer"
+    },
+    "rateLimit": {
+      "@id": "okx:rateLimit",
+      "@type": "@id"
+    },
+
+    "restAPI": {
+      "@id": "okx:restAPI",
+      "@type": "@id"
+    },
+    "webSocketAPI": {
+      "@id": "okx:webSocketAPI",
+      "@type": "@id"
+    },
+
+    "xsd": "http://www.w3.org/2001/XMLSchema#"
+  },
+  "@graph": [
+    {
+      "@type": "Organization",
+      "name": "OKX",
+      "description": "Global cryptocurrency exchange providing REST and WebSocket APIs for spot and derivatives trading, account management, market data, funding, sub-account operations, block trading, and on-chain wallet services.",
+      "url": "https://www.okx.com",
+      "sameAs": [
+        "https://x.com/okx",
+        "https://www.linkedin.com/company/okxofficial",
+        "https://github.com/okx"
+      ]
+    },
+    {
+      "@type": "WebAPI",
+      "name": "OKX Trading API",
+      "description": "REST and WebSocket endpoints for order book trading, algo orders, block trading, spread trading, and copy trading across spot, futures, options, and perpetual swap instruments.",
+      "documentation": "https://www.okx.com/docs-v5/en/",
+      "endpointURL": "https://openapi.okx.com"
+    },
+    {
+      "@type": "WebAPI",
+      "name": "OKX Market Data API",
+      "description": "Public REST and WebSocket endpoints for real-time and historical market data including order books, tickers, candlesticks, trades, funding rates, open interest, and trading statistics.",
+      "documentation": "https://www.okx.com/docs-v5/en/#market-data",
+      "endpointURL": "https://openapi.okx.com"
+    },
+    {
+      "@type": "WebAPI",
+      "name": "OKX Wallet API (Onchain OS)",
+      "description": "Developer APIs for OKX Web3 wallet integration, including multi-chain transaction signing, DEX aggregation across 500+ DEXs on 20+ networks, and on-chain account management.",
+      "documentation": "https://web3.okx.com/build/dev-docs/wallet-api",
+      "endpointURL": "https://www.okx.com"
+    }
+  ]
+}
