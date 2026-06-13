@@ -1,0 +1,126 @@
+name: OKX FinOps Framework
+description: FOCUS-aligned FinOps reference for teams consuming the OKX API. Covers cost drivers from trading fees, withdrawal fees, and API service tiers, along with optimization strategies via VIP tiers, maker order flow, OKB token discounts, and program enrollment.
+specificationVersion: '1.0'
+url: https://www.okx.com/fees
+costDimensions:
+  - name: Trading Fees
+    description: Primary cost for API consumers executing orders. Charged as a percentage of notional trade value. Differentiated by maker (liquidity provider) and taker (liquidity taker) roles, instrument type, and VIP tier.
+    billingModel: percentage-of-notional
+    currency: USD (or crypto equivalent)
+    costDrivers:
+      - name: Spot Maker Fee
+        standardRate: '0.08%'
+        topVIPRate: '-0.005% (rebate)'
+        notes: Rebates available at highest VIP tiers
+      - name: Spot Taker Fee
+        standardRate: '0.10%'
+        topVIPRate: 'reduced at VIP 8+'
+      - name: Futures/Perpetual Maker Fee
+        standardRate: '0.02%'
+        topVIPRate: '-0.010% (rebate)'
+      - name: Futures/Perpetual Taker Fee
+        standardRate: '0.05%'
+        topVIPRate: 'reduced at VIP 8+'
+      - name: Options Fee
+        standardRate: '0.03% of notional (max 12.5% of premium)'
+  - name: Withdrawal Fees
+    description: Network-based fees for withdrawing crypto assets from OKX to external addresses. Fees vary by asset and blockchain network congestion.
+    billingModel: per-transaction
+    currency: native-asset
+    costDrivers:
+      - name: On-chain Withdrawal
+        notes: Fees vary by asset (BTC, ETH, USDT network selection) and are dynamically adjusted for network conditions
+      - name: Internal Transfer
+        rate: Free
+        notes: Transfers between OKX accounts (sub-accounts, funding to trading) have no withdrawal fee
+  - name: API Access Fees
+    description: OKX core trading API is free to use. OKX Wallet API has a trial period; production tiers may incur fees upon review.
+    billingModel: freemium
+    currency: USD
+    costDrivers:
+      - name: Core Trading API
+        rate: Free
+        notes: No API subscription fee; costs arise from trading activity only
+      - name: Wallet API Trial
+        rate: Free for 60 days
+        rateLimit: 1 RPS default
+      - name: Wallet API Production
+        rate: By review
+        rateLimit: 5 RPS approved
+optimizationStrategies:
+  - name: Maximize Maker Order Flow
+    description: Place limit orders (post-only where possible) to qualify as maker and reduce or eliminate trading fees. At high VIP tiers, makers earn rebates.
+    impact: high
+    effort: medium
+  - name: VIP Tier Advancement
+    description: Consolidate trading volume on OKX to advance VIP tiers. Higher tiers deliver substantially lower taker fees. VIP tier is determined by 30-day rolling volume across spot, futures, and options combined.
+    impact: high
+    effort: low
+    url: https://www.okx.com/fees
+  - name: OKB Token Fee Discount
+    description: Holding and using OKB (OKX native token) to pay trading fees grants a discount on standard trading fees.
+    impact: medium
+    effort: low
+  - name: Market Maker Program Enrollment
+    description: Apply to the OKX Market Maker Program for near-zero or negative maker fees and lower latency access, suitable for high-frequency or algorithmic trading strategies.
+    impact: very-high
+    effort: high
+    url: https://www.okx.com/en-us/markets/maker
+  - name: Broker Program Enrollment
+    description: Brokers and aggregators can earn commission rebates on client volume, offsetting their own trading costs and creating revenue from brought flow.
+    impact: high
+    effort: high
+    url: https://www.okx.com/en-us/broker
+  - name: Internal Transfers for Asset Movement
+    description: Use internal OKX transfers (sub-account to sub-account, or funding to trading) instead of on-chain withdrawals to avoid network fees entirely.
+    impact: medium
+    effort: low
+  - name: Sub-account Fill Ratio Management
+    description: Monitor and manage fill ratios per sub-account to maintain or advance VIP-tier order rate limits. Poor fill ratios can reduce allowed order throughput.
+    impact: medium
+    effort: medium
+    notes: Fill ratio = trade volume (USDT) / (order count × symbol multiplier)
+  - name: Select Low-Fee Networks for Withdrawals
+    description: When withdrawing assets like USDT, choose lower-fee networks (e.g., TRC-20 vs ERC-20) to minimize withdrawal costs, where network support permits.
+    impact: medium
+    effort: low
+costAllocation:
+  - dimension: InstrumentType
+    values:
+      - Spot
+      - Futures
+      - Options
+      - Perpetual Swaps
+  - dimension: OrderRole
+    values:
+      - Maker
+      - Taker
+  - dimension: VIPTier
+    values:
+      - Regular
+      - VIP1
+      - VIP2
+      - VIP3
+      - VIP4
+      - VIP5
+      - VIP6
+      - VIP7
+      - VIP8
+      - VIP9
+  - dimension: SubAccount
+    description: Costs can be tracked and attributed per sub-account for organizations using multi-account structures
+  - dimension: APIKeyProject
+    description: OKX supports up to 3 projects per account with up to 3 API keys each, enabling cost attribution by project
+monitoring:
+  - name: Trading Fee Ledger
+    endpoint: /api/v5/account/bills
+    description: Query account bill history to track all trading fee charges with rate limits of 1 request per 10 seconds
+  - name: Current VIP Tier
+    endpoint: /api/v5/account/config
+    description: Check current account VIP level and fee rates
+  - name: Sub-account Summary
+    endpoint: /api/v5/users/subaccount/list
+    description: List all sub-accounts and their trading summaries for consolidated cost view
+  - name: Withdrawal History
+    endpoint: /api/v5/asset/withdrawal-history
+    description: Retrieve withdrawal records including network fees paid

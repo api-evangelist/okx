@@ -1,0 +1,101 @@
+name: OKX Plans and Pricing
+description: OKX API access is free to all registered users. Trading fees follow a tiered VIP structure based on 30-day rolling trading volume and OKB token holdings. Specialized programs offer reduced fees and enhanced API access for market makers and brokers.
+specificationVersion: '0.1'
+url: https://www.okx.com/fees
+plans:
+  - name: Standard (Regular)
+    description: Default tier for all registered OKX users with access to full REST and WebSocket API suite.
+    url: https://www.okx.com/fees
+    price: Free
+    pricingModel: volume-based-fees
+    rateLimits:
+      - type: REST
+        requests: 20
+        period: 2s
+        scope: per-user-per-instrument-type
+      - type: WebSocket
+        connections: 3
+        period: 1s
+        scope: per-ip
+    features:
+      - Full REST API access
+      - WebSocket public and private channels
+      - Up to 3 projects per account
+      - Up to 3 API keys per project
+      - Demo trading environment
+    fees:
+      spot:
+        maker: '0.08%'
+        taker: '0.10%'
+      futures:
+        maker: '0.02%'
+        taker: '0.05%'
+  - name: VIP 1
+    description: Entry-level VIP tier with reduced trading fees for traders meeting 30-day volume thresholds.
+    url: https://www.okx.com/fees
+    price: Volume-based
+    pricingModel: volume-based-fees
+    features:
+      - Reduced maker/taker fees
+      - Priority API access
+      - Full REST and WebSocket API
+    fees:
+      futures:
+        group1:
+          maker: '0.016%'
+          taker: '0.045%'
+  - name: VIP 2–8
+    description: Higher VIP tiers with progressively lower fees and higher rate limits, unlocked via 30-day rolling volume across spot, futures, and options.
+    url: https://www.okx.com/fees
+    price: Volume-based
+    pricingModel: volume-based-fees
+    features:
+      - Significantly reduced maker/taker fees
+      - Maker rebates at top tiers
+      - Enhanced rate limits
+      - Dedicated account management at VIP 5+
+    fees:
+      spot:
+        topTierMaker: '-0.005%'
+        topTierTaker: 'reduced'
+      futures:
+        topTierMaker: '-0.010%'
+  - name: Market Maker Program
+    description: Institutional program for professional market makers offering near-zero or negative maker fees and improved API latency.
+    url: https://www.okx.com/en-us/markets/maker
+    price: By application
+    pricingModel: rebate
+    features:
+      - Negative maker fees (rebates)
+      - Lower latency co-location options
+      - Dedicated support
+      - Custom rate limit arrangements
+  - name: Broker Program
+    description: Program for brokers and aggregators offering commission-sharing, sub-account management, and enhanced API capabilities.
+    url: https://www.okx.com/en-us/broker
+    price: By application
+    pricingModel: commission-sharing
+    features:
+      - Commission rebate sharing
+      - Sub-account creation API
+      - Access to OKX liquidity
+      - Dedicated broker API endpoints
+  - name: OKX Wallet API (Trial)
+    description: Trial access to the OKX Wallet/Onchain OS developer API for Web3 integrations, valid for 60 days from API key creation.
+    url: https://web3.okx.com/build/dev-docs/wallet-api
+    price: Free (trial)
+    pricingModel: freemium
+    rateLimits:
+      - type: REST
+        requests: 1
+        period: 1s
+        scope: per-key-default
+      - type: REST
+        requests: 5
+        period: 1s
+        scope: per-key-upon-approval
+    features:
+      - Multi-chain transaction signing
+      - DEX aggregation (500+ DEXs, 20+ chains)
+      - On-chain account queries
+      - Trial period 60 days

@@ -1,0 +1,109 @@
+name: OKX API Rate Limits
+description: OKX enforces rate limits at multiple levels — IP-based for public endpoints and User ID-based for private endpoints. WebSocket connections have per-IP connection limits and per-connection subscription quotas. Sub-account trading limits scale with VIP tier and fill ratio performance.
+specificationVersion: '0.1'
+url: https://www.okx.com/docs-v5/en/#overview-rate-limit
+rateLimits:
+  - name: WebSocket Connection Limit
+    description: Maximum new WebSocket connection requests per IP address per second.
+    scope: per-ip
+    limit: 3
+    period: 1s
+    type: connection
+    endpoints:
+      - wss://ws.okx.com:8443/ws/v5/public
+      - wss://ws.okx.com:8443/ws/v5/private
+      - wss://ws.okx.com:8443/ws/v5/business
+  - name: WebSocket Subscription Limit
+    description: Maximum subscribe, unsubscribe, and login operations per WebSocket connection per hour.
+    scope: per-connection
+    limit: 480
+    period: 1h
+    type: subscription
+  - name: REST Public Market Data
+    description: Rate limit for public market data endpoints (tickers, order books, candlesticks) based on IP address.
+    scope: per-ip
+    limit: 20
+    period: 2s
+    type: request
+    endpoints:
+      - /api/v5/market/tickers
+      - /api/v5/market/books
+      - /api/v5/market/candles
+  - name: REST Instrument Data
+    description: Rate limit for public instrument and trading statistics endpoints.
+    scope: per-user-per-instrument-type
+    limit: 20
+    period: 2s
+    type: request
+    endpoints:
+      - /api/v5/public/instruments
+  - name: REST Account Balance
+    description: Rate limit for private account balance and position queries.
+    scope: per-user
+    limit: 10
+    period: 2s
+    type: request
+    endpoints:
+      - /api/v5/account/balance
+      - /api/v5/account/positions
+  - name: REST Bill Details
+    description: Rate limit for account bill/transaction history endpoint.
+    scope: per-user
+    limit: 1
+    period: 10s
+    type: request
+    endpoints:
+      - /api/v5/account/bills
+  - name: REST Order Placement (Standard)
+    description: Standard sub-account order request rate limit per 2-second window.
+    scope: per-sub-account
+    limit: 1000
+    period: 2s
+    type: request
+    tier: standard
+    endpoints:
+      - /api/v5/trade/order
+      - /api/v5/trade/batch-orders
+  - name: REST Order Placement (VIP)
+    description: VIP-tier sub-account order request rate limit, scaling up to 10,000 per 2 seconds based on fill ratio performance.
+    scope: per-sub-account
+    limit: 10000
+    period: 2s
+    type: request
+    tier: vip
+    notes: Fill ratio = trade volume (USDT) / (order count × symbol multiplier). Symbol multipliers range from 0.1 (minor pairs) to 1.0 (BTC/ETH perpetuals).
+  - name: Pending Order Limits
+    description: Exchange-wide and per-symbol limits on open pending orders.
+    scope: per-account
+    limits:
+      - description: Maximum pending orders exchange-wide
+        limit: 4000
+      - description: Maximum pending orders per symbol
+        limit: 500
+    type: open-orders
+  - name: REST Wallet API (Trial Default)
+    description: Default rate limit for the OKX Wallet/Onchain OS API during 60-day trial period.
+    scope: per-api-key
+    limit: 1
+    period: 1s
+    type: request
+    tier: trial
+  - name: REST Wallet API (Approved)
+    description: Increased rate limit for OKX Wallet API after manual review and approval.
+    scope: per-api-key
+    limit: 5
+    period: 1s
+    type: request
+    tier: approved
+errorCodes:
+  - code: '50011'
+    description: Rate limit breach on REST endpoint
+  - code: '50061'
+    description: Sub-account tier violation on order rate limit
+  - code: '64008'
+    description: WebSocket service upgrade disconnect notification (60-second advance warning)
+globalLimit:
+  description: Aggregate REST API cap across all endpoints
+  limit: 250
+  period: 1s
+  notes: Equivalent to 500 requests per 2 seconds across all REST calls
