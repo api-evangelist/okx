@@ -1,0 +1,1401 @@
+"""
+OKX Exchange GraphQL Schema
+Conceptual GraphQL type system mapping OKX REST API domains:
+  - Trading Account, Funding Account, Unified Account
+  - Spot, Margin, Futures, Options, Perpetual trading
+  - Algorithmic and copy trading orders
+  - Market data, order books, candles, trades
+  - Positions, margin, leverage
+  - Asset management and on-chain wallet
+  - API key and webhook management
+
+Source: https://www.okx.com/docs-v5/en/
+"""
+
+# ---------------------------------------------------------------------------
+# Scalars
+# ---------------------------------------------------------------------------
+
+scalar DateTime
+scalar Decimal
+scalar JSON
+
+# ---------------------------------------------------------------------------
+# Enums
+# ---------------------------------------------------------------------------
+
+"""Current status of a placed order."""
+enum OrderStatus {
+  LIVE
+  PARTIALLY_FILLED
+  FILLED
+  CANCELED
+  MMP_CANCELED
+}
+
+"""Direction of an order."""
+enum OrderSide {
+  BUY
+  SELL
+}
+
+"""Category of order execution."""
+enum OrderType {
+  MARKET
+  LIMIT
+  POST_ONLY
+  FOK
+  IOC
+  OPTIMAL_LIMIT_IOC
+  MMP
+  MMP_AND_POST_ONLY
+}
+
+"""Position side for futures/options."""
+enum PosSide {
+  LONG
+  SHORT
+  NET
+}
+
+"""Trade mode — isolated, cross, or cash."""
+enum TDMode {
+  ISOLATED
+  CROSS
+  CASH
+  SPOT_ISOLATED
+}
+
+"""Instrument class."""
+enum InstType {
+  SPOT
+  MARGIN
+  FUTURES
+  OPTION
+  SWAP
+}
+
+"""Margin mode at the account level."""
+enum MarginModeType {
+  ISOLATED
+  CROSS
+}
+
+"""State of a position."""
+enum PositionState {
+  NORMAL
+  UNREALIZED_PNL_NEGATIVE
+  LIQUIDATING
+  PARTIALLY_LIQUIDATED
+}
+
+"""Algo order type."""
+enum AlgoOrderType {
+  CONDITIONAL
+  OCO
+  TRIGGER
+  MOVE_ORDER_STOP
+  TWAP
+  CHASE_ORDER
+  GRID
+  MOON_GRID
+  RECURRING_BUY
+  SMART_SYNC
+  COPY_TRADE
+}
+
+"""Algo order state."""
+enum AlgoOrderStatus {
+  LIVE
+  PAUSED
+  EFFECTIVE
+  CANCELED
+  ORDER_FAILED
+}
+
+"""Option type."""
+enum OptionType {
+  CALL
+  PUT
+}
+
+"""Direction of a transfer."""
+enum TransferType {
+  TRANSFER_FROM_SUB_TO_MASTER
+  TRANSFER_FROM_MASTER_TO_SUB
+  INTERNAL
+}
+
+"""Webhook delivery status."""
+enum WebhookStatus {
+  ACTIVE
+  INACTIVE
+  FAILED
+}
+
+"""Event category delivered by a webhook."""
+enum WebhookEventType {
+  ORDER_FILLED
+  ORDER_CANCELED
+  POSITION_UPDATED
+  DEPOSIT_CONFIRMED
+  WITHDRAWAL_COMPLETED
+  ALGO_ORDER_TRIGGERED
+}
+
+# ---------------------------------------------------------------------------
+# Account types
+# ---------------------------------------------------------------------------
+
+"""Top-level account container for an OKX user."""
+type Account {
+  uid: ID!
+  mainUid: ID
+  label: String
+  level: String
+  levelTmp: String
+  acctLv: String
+  posMode: String
+  autoLoan: Boolean
+  greeksType: String
+  ip: String
+  perm: String
+  subAcct: String
+  tradingAccount: TradingAccount
+  fundingAccount: FundingAccount
+  unifiedAccount: UnifiedAccount
+  apiKeys: [APIKey!]!
+  webhooks: [Webhook!]!
+}
+
+"""Trading account — holds margin balances used for active trading."""
+type TradingAccount {
+  uid: ID!
+  adjEq: Decimal
+  borrowFroz: Decimal
+  details: [CurrencyBalance!]!
+  imr: Decimal
+  isoEq: Decimal
+  mgnRatio: Decimal
+  mmr: Decimal
+  notionalUsd: Decimal
+  ordFroz: Decimal
+  totalEq: Decimal
+  uTime: DateTime
+  equity: Equity
+}
+
+"""Funding account — holds assets available for deposits and withdrawals."""
+type FundingAccount {
+  uid: ID!
+  balances: [CurrencyBalance!]!
+  totalUsdValue: Decimal
+  updatedAt: DateTime
+}
+
+"""
+Unified account combining trading and funding under a single margin pool.
+Enabled for users who have switched to OKX's Unified Account mode.
+"""
+type UnifiedAccount {
+  uid: ID!
+  acctLv: String
+  totalEq: Decimal
+  isoEq: Decimal
+  adjEq: Decimal
+  ordFroz: Decimal
+  imr: Decimal
+  mmr: Decimal
+  borrowFroz: Decimal
+  mgnRatio: Decimal
+  notionalUsd: Decimal
+  uTime: DateTime
+  details: [CurrencyBalance!]!
+  riskExposure: RiskExposure
+}
+
+# ---------------------------------------------------------------------------
+# Balance types
+# ---------------------------------------------------------------------------
+
+"""Generic balance for a single currency across any account type."""
+type Balance {
+  currency: String!
+  availBal: Decimal!
+  frozenBal: Decimal!
+  bal: Decimal!
+}
+
+"""Detailed per-currency balance within the trading account."""
+type CurrencyBalance {
+  ccy: String!
+  bal: Decimal!
+  frozenBal: Decimal!
+  availBal: Decimal!
+  availEq: Decimal
+  cashBal: Decimal
+  uTime: DateTime
+  disEq: Decimal
+  eq: Decimal
+  eqUsd: Decimal
+  fixedBal: Decimal
+  frozenBal2: Decimal
+  interest: Decimal
+  isoEq: Decimal
+  isoLiab: Decimal
+  isoUpl: Decimal
+  liab: Decimal
+  maxLoan: Decimal
+  mgnRatio: Decimal
+  notionalLever: Decimal
+  ordFrozen: Decimal
+  rewardBal: Decimal
+  smtSyncEq: Decimal
+  spotInUseAmt: Decimal
+  spotIsoBal: Decimal
+  stgyEq: Decimal
+  twap: Decimal
+  upl: Decimal
+  uplLiab: Decimal
+  crossLiab: Decimal
+  spotBal: Decimal
+  openAvgPx: [JSON]
+  accAvgPx: [JSON]
+  spotUpl: Decimal
+  spotUplRatio: Decimal
+  totalPnl: Decimal
+  totalPnlRatio: Decimal
+}
+
+"""Margin-specific balance information."""
+type MarginBalance {
+  instId: String!
+  ccy: String!
+  bal: Decimal!
+  frozenBal: Decimal!
+  availBal: Decimal!
+  liability: Decimal!
+  interest: Decimal!
+  marginRatio: Decimal!
+}
+
+"""Aggregated equity summary for the trading account."""
+type Equity {
+  totalEq: Decimal!
+  isoEq: Decimal
+  adjEq: Decimal
+  ordFroz: Decimal
+  imr: Decimal
+  mmr: Decimal
+  notionalUsd: Decimal
+  mgnRatio: Decimal
+}
+
+"""Risk exposure metrics for a unified or trading account."""
+type RiskExposure {
+  atRisk: Boolean!
+  mgnRatio: Decimal!
+  imr: Decimal!
+  mmr: Decimal!
+  notionalUsd: Decimal!
+  liquidationPrice: Decimal
+}
+
+"""High-level portfolio summary across all positions and account types."""
+type Portfolio {
+  uid: ID!
+  totalEquityUsd: Decimal!
+  unrealizedPnlUsd: Decimal!
+  realizedPnlUsd: Decimal!
+  totalMarginUsed: Decimal!
+  availableMargin: Decimal!
+  positions: [Position!]!
+  openOrders: [Order!]!
+}
+
+# ---------------------------------------------------------------------------
+# Position types
+# ---------------------------------------------------------------------------
+
+"""An open position in any instrument type."""
+type Position {
+  posId: ID!
+  instType: InstType!
+  instId: String!
+  mgnMode: TDMode!
+  posSide: PosSide!
+  pos: Decimal!
+  baseBal: Decimal
+  quoteBal: Decimal
+  baseBorrowed: Decimal
+  baseInterest: Decimal
+  quoteBorrowed: Decimal
+  quoteInterest: Decimal
+  posCcy: String
+  availPos: Decimal
+  avgPx: Decimal
+  upl: Decimal
+  uplRatio: Decimal
+  uplLastPx: Decimal
+  uplRatioLastPx: Decimal
+  lever: Decimal
+  liqPx: Decimal
+  imr: Decimal
+  margin: Decimal
+  mgnRatio: Decimal
+  mmr: Decimal
+  liab: Decimal
+  liabCcy: String
+  interest: Decimal
+  tradeId: ID
+  optVal: Decimal
+  pendingCloseOrdLiabVal: Decimal
+  notionalUsd: Decimal
+  adl: Int
+  ccy: String
+  last: Decimal
+  idxPx: Decimal
+  usdPx: Decimal
+  bePx: Decimal
+  deltaBS: Decimal
+  deltaPA: Decimal
+  gammaBS: Decimal
+  gammaPA: Decimal
+  thetaBS: Decimal
+  thetaPA: Decimal
+  vegaBS: Decimal
+  vegaPA: Decimal
+  spotInUseAmt: Decimal
+  clSpotInUseAmt: Decimal
+  maxSpotInUseAmt: Decimal
+  realizedPnl: Decimal
+  pnl: Decimal
+  fee: Decimal
+  fundingFee: Decimal
+  liqPenalty: Decimal
+  closeOrderAlgo: [JSON]
+  cTime: DateTime
+  uTime: DateTime
+  pTime: DateTime
+  state: PositionState
+}
+
+"""Summary of positions aggregated across instruments."""
+type PositionSummary {
+  instType: InstType!
+  mgnMode: TDMode!
+  ccy: String!
+  notionalUsd: Decimal!
+  notionalCcy: Decimal!
+  imr: Decimal!
+  mmr: Decimal!
+  upl: Decimal!
+  updatedAt: DateTime!
+}
+
+# ---------------------------------------------------------------------------
+# Margin & Leverage types
+# ---------------------------------------------------------------------------
+
+"""Margin mode configuration for an account or instrument."""
+type MarginMode {
+  instId: String
+  mgnMode: MarginModeType!
+  lever: Decimal
+}
+
+"""Cross margin state for a currency pair."""
+type CrossMargin {
+  instId: String!
+  ccy: String!
+  maxLoan: Decimal!
+  marginalRatio: Decimal!
+  availBal: Decimal!
+  frozenBal: Decimal!
+  interest: Decimal!
+  liability: Decimal!
+}
+
+"""Isolated margin state for a specific instrument."""
+type IsolatedMargin {
+  instId: String!
+  margin: Decimal!
+  posSide: PosSide!
+  availBal: Decimal!
+  frozenBal: Decimal!
+}
+
+"""Leverage setting for a specific instrument and margin mode."""
+type LeverageInfo {
+  instId: String!
+  mgnMode: TDMode!
+  posSide: PosSide
+  lever: Decimal!
+}
+
+# ---------------------------------------------------------------------------
+# Order types
+# ---------------------------------------------------------------------------
+
+"""Base order fields shared across all order types."""
+interface OrderBase {
+  ordId: ID!
+  clOrdId: String
+  instType: InstType!
+  instId: String!
+  side: OrderSide!
+  ordType: OrderType!
+  px: Decimal
+  sz: Decimal!
+  state: OrderStatus!
+  fillSz: Decimal
+  fillPx: Decimal
+  fee: Decimal
+  feeCcy: String
+  avgPx: Decimal
+  tradeId: ID
+  posSide: PosSide
+  tdMode: TDMode
+  lever: Decimal
+  cTime: DateTime!
+  uTime: DateTime!
+}
+
+"""Generic order — returned when instrument type is unknown at query time."""
+type Order implements OrderBase {
+  ordId: ID!
+  clOrdId: String
+  instType: InstType!
+  instId: String!
+  side: OrderSide!
+  ordType: OrderType!
+  px: Decimal
+  sz: Decimal!
+  state: OrderStatus!
+  fillSz: Decimal
+  fillPx: Decimal
+  fee: Decimal
+  feeCcy: String
+  avgPx: Decimal
+  tradeId: ID
+  posSide: PosSide
+  tdMode: TDMode
+  lever: Decimal
+  cTime: DateTime!
+  uTime: DateTime!
+  tgtCcy: String
+  rebate: Decimal
+  rebateCcy: String
+  pnl: Decimal
+  source: String
+  isTpLimit: Boolean
+  attachAlgoOrds: [JSON]
+  linkedAlgoOrd: JSON
+  quickMgnType: String
+}
+
+"""Spot market order."""
+type SpotOrder implements OrderBase {
+  ordId: ID!
+  clOrdId: String
+  instType: InstType!
+  instId: String!
+  side: OrderSide!
+  ordType: OrderType!
+  px: Decimal
+  sz: Decimal!
+  state: OrderStatus!
+  fillSz: Decimal
+  fillPx: Decimal
+  fee: Decimal
+  feeCcy: String
+  avgPx: Decimal
+  tradeId: ID
+  posSide: PosSide
+  tdMode: TDMode
+  lever: Decimal
+  cTime: DateTime!
+  uTime: DateTime!
+  tgtCcy: String
+  rebate: Decimal
+  rebateCcy: String
+}
+
+"""Margin (cross or isolated) order."""
+type MarginOrder implements OrderBase {
+  ordId: ID!
+  clOrdId: String
+  instType: InstType!
+  instId: String!
+  side: OrderSide!
+  ordType: OrderType!
+  px: Decimal
+  sz: Decimal!
+  state: OrderStatus!
+  fillSz: Decimal
+  fillPx: Decimal
+  fee: Decimal
+  feeCcy: String
+  avgPx: Decimal
+  tradeId: ID
+  posSide: PosSide
+  tdMode: TDMode
+  lever: Decimal
+  cTime: DateTime!
+  uTime: DateTime!
+  ccy: String
+  rebate: Decimal
+  rebateCcy: String
+}
+
+"""Futures delivery or expiring contract order."""
+type FuturesOrder implements OrderBase {
+  ordId: ID!
+  clOrdId: String
+  instType: InstType!
+  instId: String!
+  side: OrderSide!
+  ordType: OrderType!
+  px: Decimal
+  sz: Decimal!
+  state: OrderStatus!
+  fillSz: Decimal
+  fillPx: Decimal
+  fee: Decimal
+  feeCcy: String
+  avgPx: Decimal
+  tradeId: ID
+  posSide: PosSide
+  tdMode: TDMode
+  lever: Decimal
+  cTime: DateTime!
+  uTime: DateTime!
+  fillTime: DateTime
+  fillFee: Decimal
+  fillFeeCcy: String
+  pnl: Decimal
+}
+
+"""Options contract order."""
+type OptionOrder implements OrderBase {
+  ordId: ID!
+  clOrdId: String
+  instType: InstType!
+  instId: String!
+  side: OrderSide!
+  ordType: OrderType!
+  px: Decimal
+  sz: Decimal!
+  state: OrderStatus!
+  fillSz: Decimal
+  fillPx: Decimal
+  fee: Decimal
+  feeCcy: String
+  avgPx: Decimal
+  tradeId: ID
+  posSide: PosSide
+  tdMode: TDMode
+  lever: Decimal
+  cTime: DateTime!
+  uTime: DateTime!
+  optType: OptionType
+  stk: Decimal
+  expDate: String
+  uly: String
+}
+
+"""Algorithmic order — parent type for all algo strategies."""
+type AlgoOrder {
+  algoOrdId: ID!
+  clAlgoOrdId: String
+  instType: InstType!
+  instId: String!
+  side: OrderSide!
+  algoOrdType: AlgoOrderType!
+  sz: Decimal
+  state: AlgoOrderStatus!
+  lever: Decimal
+  tpTriggerPx: Decimal
+  tpOrdPx: Decimal
+  slTriggerPx: Decimal
+  slOrdPx: Decimal
+  triggerPx: Decimal
+  triggerPxType: String
+  ordPx: Decimal
+  actualSz: Decimal
+  actualPx: Decimal
+  actualSide: String
+  posSide: PosSide
+  tdMode: TDMode
+  cTime: DateTime!
+  uTime: DateTime!
+  triggerTime: DateTime
+  callbackRatio: Decimal
+  callbackSpread: Decimal
+  moveTriggerPx: Decimal
+}
+
+"""Conditional (take-profit / stop-loss) algo order."""
+type ConditionalOrder {
+  algoOrdId: ID!
+  instId: String!
+  side: OrderSide!
+  sz: Decimal!
+  tpTriggerPx: Decimal
+  tpOrdPx: Decimal
+  slTriggerPx: Decimal
+  slOrdPx: Decimal
+  tpTriggerPxType: String
+  slTriggerPxType: String
+  state: AlgoOrderStatus!
+  cTime: DateTime!
+  uTime: DateTime!
+}
+
+"""Grid trading algo order."""
+type GridOrder {
+  algoOrdId: ID!
+  instId: String!
+  algoOrdType: AlgoOrderType!
+  maxPx: Decimal!
+  minPx: Decimal!
+  gridNum: Int!
+  runType: String!
+  tpTriggerPx: Decimal
+  slTriggerPx: Decimal
+  investmentAmt: Decimal
+  investmentCcy: String
+  totalPnl: Decimal
+  pnlRatio: Decimal
+  createdContracts: Int
+  canceledContracts: Int
+  activePx: Decimal
+  totalAnnualizedRate: Decimal
+  activeContracts: [JSON]
+  state: AlgoOrderStatus!
+  cTime: DateTime!
+  uTime: DateTime!
+}
+
+"""Stop (stop-market or stop-limit) order."""
+type StopOrder {
+  algoOrdId: ID!
+  instId: String!
+  side: OrderSide!
+  sz: Decimal!
+  triggerPx: Decimal!
+  ordPx: Decimal
+  triggerPxType: String!
+  state: AlgoOrderStatus!
+  cTime: DateTime!
+  uTime: DateTime!
+}
+
+"""Time-weighted average price algorithmic order."""
+type TWAPOrder {
+  algoOrdId: ID!
+  instId: String!
+  side: OrderSide!
+  sz: Decimal!
+  pxVar: Decimal
+  pxSpread: Decimal
+  szLimit: Decimal!
+  timeInterval: Int!
+  cTime: DateTime!
+  uTime: DateTime!
+  state: AlgoOrderStatus!
+  executedSz: Decimal
+  executedAvgPx: Decimal
+}
+
+"""Copy trading relationship — following a lead trader."""
+type CopyTrade {
+  copyTradeId: ID!
+  leadTraderUid: ID!
+  instType: InstType!
+  instId: String
+  copyMgnMode: TDMode!
+  copyRatio: Decimal
+  maxInvestAmt: Decimal
+  state: String!
+  totalPnl: Decimal
+  cTime: DateTime!
+  uTime: DateTime!
+}
+
+# ---------------------------------------------------------------------------
+# Instrument types
+# ---------------------------------------------------------------------------
+
+"""Base instrument descriptor."""
+interface InstrumentBase {
+  instId: String!
+  instType: InstType!
+  baseCcy: String
+  quoteCcy: String
+  settleCcy: String
+  ctVal: Decimal
+  ctMult: Decimal
+  ctValCcy: String
+  listTime: DateTime
+  expTime: DateTime
+  state: String!
+}
+
+"""Generic instrument — used when specific type is not needed."""
+type Instrument implements InstrumentBase {
+  instId: String!
+  instType: InstType!
+  baseCcy: String
+  quoteCcy: String
+  settleCcy: String
+  ctVal: Decimal
+  ctMult: Decimal
+  ctValCcy: String
+  listTime: DateTime
+  expTime: DateTime
+  state: String!
+  uly: String
+  instFamily: String
+  tickSz: Decimal
+  lotSz: Decimal
+  minSz: Decimal
+  maxIsoLever: Decimal
+  lever: Decimal
+  optType: OptionType
+  stk: Decimal
+  alias: String
+  ruleType: String
+}
+
+"""Spot trading pair instrument."""
+type SpotInstrument implements InstrumentBase {
+  instId: String!
+  instType: InstType!
+  baseCcy: String
+  quoteCcy: String
+  settleCcy: String
+  ctVal: Decimal
+  ctMult: Decimal
+  ctValCcy: String
+  listTime: DateTime
+  expTime: DateTime
+  state: String!
+  tickSz: Decimal!
+  lotSz: Decimal!
+  minSz: Decimal!
+  maxMktSz: Decimal
+  maxLmtSz: Decimal
+}
+
+"""Expiring futures contract instrument."""
+type FutureInstrument implements InstrumentBase {
+  instId: String!
+  instType: InstType!
+  baseCcy: String
+  quoteCcy: String
+  settleCcy: String
+  ctVal: Decimal
+  ctMult: Decimal
+  ctValCcy: String
+  listTime: DateTime
+  expTime: DateTime
+  state: String!
+  uly: String!
+  instFamily: String!
+  alias: String!
+  lever: Decimal
+  tickSz: Decimal!
+  lotSz: Decimal!
+  minSz: Decimal!
+  ruleType: String
+}
+
+"""Perpetual swap instrument (no expiry)."""
+type PerpetualInstrument implements InstrumentBase {
+  instId: String!
+  instType: InstType!
+  baseCcy: String
+  quoteCcy: String
+  settleCcy: String
+  ctVal: Decimal
+  ctMult: Decimal
+  ctValCcy: String
+  listTime: DateTime
+  expTime: DateTime
+  state: String!
+  uly: String!
+  instFamily: String!
+  lever: Decimal
+  tickSz: Decimal!
+  lotSz: Decimal!
+  minSz: Decimal!
+  fundingSettleEvery: Int
+}
+
+"""Options contract instrument."""
+type OptionInstrument implements InstrumentBase {
+  instId: String!
+  instType: InstType!
+  baseCcy: String
+  quoteCcy: String
+  settleCcy: String
+  ctVal: Decimal
+  ctMult: Decimal
+  ctValCcy: String
+  listTime: DateTime
+  expTime: DateTime
+  state: String!
+  uly: String!
+  instFamily: String!
+  stk: Decimal!
+  optType: OptionType!
+}
+
+"""Option chain — all strikes and expiries for an underlying asset."""
+type OptionChain {
+  underlying: String!
+  expDate: String!
+  options: [OptionInstrument!]!
+  callOptions: [OptionInstrument!]!
+  putOptions: [OptionInstrument!]!
+}
+
+# ---------------------------------------------------------------------------
+# Market Data types
+# ---------------------------------------------------------------------------
+
+"""24-hour ticker for an instrument."""
+type MarketTicker {
+  instId: String!
+  instType: InstType!
+  last: Decimal!
+  lastSz: Decimal!
+  askPx: Decimal!
+  askSz: Decimal!
+  bidPx: Decimal!
+  bidSz: Decimal!
+  open24h: Decimal!
+  high24h: Decimal!
+  low24h: Decimal!
+  sodUtc0: Decimal
+  sodUtc8: Decimal
+  volCcy24h: Decimal!
+  vol24h: Decimal!
+  ts: DateTime!
+}
+
+"""Order book snapshot with bids and asks."""
+type OrderBook {
+  instId: String!
+  bids: [OrderBookEntry!]!
+  asks: [OrderBookEntry!]!
+  ts: DateTime!
+  checksum: Int
+}
+
+"""Single price level in an order book."""
+type OrderBookEntry {
+  price: Decimal!
+  size: Decimal!
+  liquidatedOrders: Int!
+  numberOfOrders: Int!
+}
+
+"""OHLCV candlestick (bar) data point."""
+type Candle {
+  instId: String!
+  ts: DateTime!
+  o: Decimal!
+  h: Decimal!
+  l: Decimal!
+  c: Decimal!
+  vol: Decimal!
+  volCcy: Decimal!
+  volCcyQuote: Decimal!
+  confirm: Boolean!
+}
+
+"""A single executed trade on the exchange."""
+type Trade {
+  instId: String!
+  tradeId: ID!
+  side: OrderSide!
+  sz: Decimal!
+  px: Decimal!
+  ts: DateTime!
+}
+
+"""Index price data for an underlying asset."""
+type IndexData {
+  instId: String!
+  idxPx: Decimal!
+  high24h: Decimal!
+  sodUtc0: Decimal!
+  open24h: Decimal!
+  low24h: Decimal!
+  sodUtc8: Decimal!
+  ts: DateTime!
+}
+
+"""Funding rate for a perpetual swap instrument."""
+type FundingRate {
+  instId: String!
+  instType: InstType!
+  fundingRate: Decimal!
+  nextFundingRate: Decimal
+  fundingTime: DateTime!
+  nextFundingTime: DateTime
+  minFundingRate: Decimal
+  maxFundingRate: Decimal
+  method: String
+  settFundingRate: Decimal
+  ts: DateTime!
+}
+
+"""Open interest for a futures or perpetual instrument."""
+type OpenInterest {
+  instId: String!
+  instType: InstType!
+  oi: Decimal!
+  oiCcy: Decimal!
+  oiUsd: Decimal
+  ts: DateTime!
+}
+
+"""A forced liquidation order."""
+type LiquidationOrder {
+  instId: String!
+  instType: InstType!
+  side: OrderSide!
+  posSide: PosSide!
+  bkPx: Decimal!
+  sz: Decimal!
+  bkLoss: Decimal
+  cTime: DateTime!
+}
+
+"""Mark price for margin and futures instruments."""
+type Mark {
+  instType: InstType!
+  instId: String!
+  markPx: Decimal!
+  ts: DateTime!
+}
+
+"""Taker buy/sell volume over a given period."""
+type TakerVolume {
+  ts: DateTime!
+  sellVol: Decimal!
+  buyVol: Decimal!
+}
+
+"""Long/short account ratio for a given instrument."""
+type LongShortRatio {
+  instId: String!
+  ts: DateTime!
+  longShortAcctRatio: Decimal!
+}
+
+# ---------------------------------------------------------------------------
+# Asset types
+# ---------------------------------------------------------------------------
+
+"""Currency/asset metadata."""
+type Asset {
+  ccy: String!
+  name: String
+  chain: String
+  canDep: Boolean!
+  canWd: Boolean!
+  canInternal: Boolean!
+  minDep: Decimal
+  minWd: Decimal
+  maxWd: Decimal
+  wdTickSz: Decimal
+  wdQuota: Decimal
+  usedWdQuota: Decimal
+  minDepArrivalConfirm: Int
+  minUnlockConfirm: Int
+  depQuotaFixed: Decimal
+  depQuoteDailyLayer2: Decimal
+  mainNet: Boolean
+  logoLink: String
+}
+
+# ---------------------------------------------------------------------------
+# Authentication & API Key types
+# ---------------------------------------------------------------------------
+
+"""OKX API key credential record."""
+type APIKey {
+  apiKey: String!
+  label: String!
+  perm: String!
+  ip: String
+  ts: DateTime!
+}
+
+"""OAuth 2.0 token for OKX Web3 integrations."""
+type OAuthToken {
+  accessToken: String!
+  tokenType: String!
+  expiresIn: Int!
+  refreshToken: String
+  scope: String
+}
+
+# ---------------------------------------------------------------------------
+# Webhook types
+# ---------------------------------------------------------------------------
+
+"""Webhook endpoint registration."""
+type Webhook {
+  webhookId: ID!
+  url: String!
+  events: [WebhookEventType!]!
+  status: WebhookStatus!
+  secret: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""Single webhook event delivery record."""
+type WebhookEvent {
+  eventId: ID!
+  webhookId: ID!
+  eventType: WebhookEventType!
+  payload: JSON!
+  deliveredAt: DateTime
+  responseCode: Int
+  status: WebhookStatus!
+}
+
+# ---------------------------------------------------------------------------
+# Supporting / operational types
+# ---------------------------------------------------------------------------
+
+"""Asset transfer between OKX account types or sub-accounts."""
+type Transfer {
+  transId: ID!
+  ccy: String!
+  amt: Decimal!
+  from: String!
+  to: String!
+  subAcct: String
+  ts: DateTime!
+}
+
+"""Withdrawal request."""
+type Withdrawal {
+  wdId: ID!
+  ccy: String!
+  chain: String!
+  amt: Decimal!
+  fee: Decimal!
+  addr: String!
+  areaCode: String
+  clientId: String
+  state: Int!
+  ts: DateTime!
+}
+
+# ---------------------------------------------------------------------------
+# Input types
+# ---------------------------------------------------------------------------
+
+input PlaceOrderInput {
+  instId: String!
+  tdMode: TDMode!
+  side: OrderSide!
+  ordType: OrderType!
+  sz: String!
+  px: String
+  ccy: String
+  clOrdId: String
+  tag: String
+  posSide: PosSide
+  reduceOnly: Boolean
+  tgtCcy: String
+  tpTriggerPx: String
+  tpOrdPx: String
+  slTriggerPx: String
+  slOrdPx: String
+  stpId: Int
+  stpMode: String
+  attachAlgoOrds: [JSON]
+}
+
+input AmendOrderInput {
+  instId: String!
+  ordId: ID
+  clOrdId: String
+  reqId: String
+  newSz: String
+  newPx: String
+  newTpTriggerPx: String
+  newTpOrdPx: String
+  newSlTriggerPx: String
+  newSlOrdPx: String
+}
+
+input PlaceAlgoOrderInput {
+  instId: String!
+  tdMode: TDMode!
+  side: OrderSide!
+  ordType: AlgoOrderType!
+  sz: String
+  ccy: String
+  posSide: PosSide
+  tpTriggerPx: String
+  tpOrdPx: String
+  slTriggerPx: String
+  slOrdPx: String
+  triggerPx: String
+  ordPx: String
+  pxVar: String
+  pxSpread: String
+  szLimit: String
+  timeInterval: Int
+  tpTriggerPxType: String
+  slTriggerPxType: String
+  callbackRatio: String
+  callbackSpread: String
+  activePx: String
+  maxPx: String
+  minPx: String
+  gridNum: String
+  runType: String
+  lever: String
+}
+
+input TransferInput {
+  ccy: String!
+  amt: String!
+  from: String!
+  to: String!
+  subAcct: String
+  type: TransferType
+  loanTrans: Boolean
+  omitPosRisk: Boolean
+}
+
+input WithdrawInput {
+  ccy: String!
+  amt: String!
+  dest: Int!
+  toAddr: String!
+  fee: String!
+  chain: String
+  areaCode: String
+  clientId: String
+}
+
+input APIKeyInput {
+  label: String!
+  passphrase: String!
+  ip: String
+  perm: String!
+}
+
+input WebhookInput {
+  url: String!
+  events: [WebhookEventType!]!
+  secret: String
+}
+
+# ---------------------------------------------------------------------------
+# Root types
+# ---------------------------------------------------------------------------
+
+type Query {
+  """Retrieve account details for the authenticated user."""
+  account: Account
+
+  """Retrieve the trading account balances."""
+  tradingAccount: TradingAccount
+
+  """Retrieve the funding account balances."""
+  fundingAccount: FundingAccount
+
+  """Retrieve the unified account (if enabled)."""
+  unifiedAccount: UnifiedAccount
+
+  """Retrieve a portfolio summary."""
+  portfolio: Portfolio
+
+  """Retrieve open positions, optionally filtered by instrument type."""
+  positions(instType: InstType, instId: String, posId: ID): [Position!]!
+
+  """Retrieve a position summary aggregated by instrument type."""
+  positionSummary(instType: InstType, ccy: String): [PositionSummary!]!
+
+  """Retrieve leverage settings for an instrument."""
+  leverageInfo(instId: String!, mgnMode: TDMode!): LeverageInfo
+
+  """Retrieve a single order by ID."""
+  order(ordId: ID!, instId: String!): Order
+
+  """Retrieve all open orders, optionally filtered."""
+  openOrders(instType: InstType, instId: String, ordType: OrderType): [Order!]!
+
+  """Retrieve order history (last 7 days by default)."""
+  orderHistory(instType: InstType, instId: String, after: String, before: String, limit: Int): [Order!]!
+
+  """Retrieve archived order history (beyond 7 days, up to 3 months)."""
+  orderHistoryArchive(instType: InstType!, instId: String, after: String, before: String, limit: Int): [Order!]!
+
+  """Retrieve algo orders."""
+  algoOrders(algoOrdType: AlgoOrderType!, instType: InstType, instId: String, state: AlgoOrderStatus): [AlgoOrder!]!
+
+  """Retrieve algo order history."""
+  algoOrderHistory(algoOrdType: AlgoOrderType!, instType: InstType, after: String, before: String, limit: Int): [AlgoOrder!]!
+
+  """Retrieve all instruments for a given type."""
+  instruments(instType: InstType!, uly: String, instFamily: String): [Instrument!]!
+
+  """Retrieve a single instrument by ID."""
+  instrument(instId: String!): Instrument
+
+  """Retrieve the option chain for an underlying and optional expiry date."""
+  optionChain(underlying: String!, expDate: String): OptionChain
+
+  """Retrieve a 24-hour ticker for an instrument."""
+  ticker(instId: String!): MarketTicker
+
+  """Retrieve all tickers for an instrument type."""
+  tickers(instType: InstType!, uly: String, instFamily: String): [MarketTicker!]!
+
+  """Retrieve the order book for an instrument."""
+  orderBook(instId: String!, depth: Int): OrderBook
+
+  """Retrieve candlestick data."""
+  candles(instId: String!, bar: String, after: String, before: String, limit: Int): [Candle!]!
+
+  """Retrieve historical candlestick data (beyond the standard window)."""
+  candlesHistory(instId: String!, bar: String, after: String, before: String, limit: Int): [Candle!]!
+
+  """Retrieve recent public trades for an instrument."""
+  trades(instId: String!, limit: Int): [Trade!]!
+
+  """Retrieve trade history."""
+  tradesHistory(instId: String!, type: Int, after: String, before: String, limit: Int): [Trade!]!
+
+  """Retrieve index price data."""
+  indexTicker(instId: String!): IndexData
+
+  """Retrieve current and next funding rate for a perpetual swap."""
+  fundingRate(instId: String!): FundingRate
+
+  """Retrieve historical funding rates."""
+  fundingRateHistory(instId: String!, after: String, before: String, limit: Int): [FundingRate!]!
+
+  """Retrieve open interest for futures or perpetuals."""
+  openInterest(instType: InstType!, uly: String, instFamily: String): [OpenInterest!]!
+
+  """Retrieve mark price."""
+  markPrice(instType: InstType!, uly: String, instId: String): [Mark!]!
+
+  """Retrieve taker volume over a period."""
+  takerVolume(ccy: String!, instType: String, period: String): [TakerVolume!]!
+
+  """Retrieve long/short account ratio."""
+  longShortRatio(instId: String!, period: String): [LongShortRatio!]!
+
+  """Retrieve recent liquidation orders."""
+  liquidationOrders(instType: InstType!, uly: String, instId: String, ccy: String, before: String, after: String, limit: Int, state: String): [LiquidationOrder!]!
+
+  """Retrieve available currencies/assets."""
+  assets(ccy: String): [Asset!]!
+
+  """Retrieve API keys for the authenticated account."""
+  apiKeys: [APIKey!]!
+
+  """Retrieve webhook registrations."""
+  webhooks: [Webhook!]!
+
+  """Retrieve webhook event delivery history."""
+  webhookEvents(webhookId: ID!, limit: Int): [WebhookEvent!]!
+}
+
+type Mutation {
+  """Place a new order."""
+  placeOrder(input: PlaceOrderInput!): Order!
+
+  """Cancel an existing order."""
+  cancelOrder(ordId: ID!, instId: String!, clOrdId: String): Order!
+
+  """Amend an existing live order."""
+  amendOrder(input: AmendOrderInput!): Order!
+
+  """Place an algorithmic order."""
+  placeAlgoOrder(input: PlaceAlgoOrderInput!): AlgoOrder!
+
+  """Cancel an algorithmic order."""
+  cancelAlgoOrder(algoOrdId: ID!, instId: String!): AlgoOrder!
+
+  """Amend an active algo order."""
+  amendAlgoOrder(algoOrdId: ID!, instId: String!, newSz: String, newTpTriggerPx: String, newTpOrdPx: String, newSlTriggerPx: String, newSlOrdPx: String): AlgoOrder!
+
+  """Set leverage for an instrument and margin mode."""
+  setLeverage(instId: String, ccy: String, lever: String!, mgnMode: TDMode!, posSide: PosSide): LeverageInfo!
+
+  """Set the margin mode for the account."""
+  setMarginMode(acctLv: String!): Account!
+
+  """Transfer funds between account types or sub-accounts."""
+  transferFunds(input: TransferInput!): Transfer!
+
+  """Submit a withdrawal request."""
+  withdraw(input: WithdrawInput!): Withdrawal!
+
+  """Create a new API key."""
+  createAPIKey(input: APIKeyInput!): APIKey!
+
+  """Delete an API key."""
+  deleteAPIKey(apiKey: String!): Boolean!
+
+  """Register a new webhook endpoint."""
+  createWebhook(input: WebhookInput!): Webhook!
+
+  """Update a webhook registration."""
+  updateWebhook(webhookId: ID!, input: WebhookInput!): Webhook!
+
+  """Delete a webhook registration."""
+  deleteWebhook(webhookId: ID!): Boolean!
+}
+
+type Subscription {
+  """Subscribe to real-time ticker updates for an instrument."""
+  tickerUpdated(instId: String!): MarketTicker!
+
+  """Subscribe to real-time order book updates."""
+  orderBookUpdated(instId: String!, depth: String): OrderBook!
+
+  """Subscribe to candlestick updates."""
+  candleUpdated(instId: String!, bar: String): Candle!
+
+  """Subscribe to real-time public trade stream."""
+  tradeStream(instId: String!): Trade!
+
+  """Subscribe to order status changes for the authenticated account."""
+  orderUpdated(instId: String, instType: InstType): Order!
+
+  """Subscribe to position updates."""
+  positionUpdated(instType: InstType): Position!
+
+  """Subscribe to account balance updates."""
+  accountUpdated: TradingAccount!
+
+  """Subscribe to funding rate updates for a perpetual swap."""
+  fundingRateUpdated(instId: String!): FundingRate!
+
+  """Subscribe to mark price updates."""
+  markPriceUpdated(instType: InstType!, instId: String): Mark!
+
+  """Subscribe to liquidation order events."""
+  liquidationOrderStream(instType: InstType!): LiquidationOrder!
+
+  """Subscribe to algo order status changes."""
+  algoOrderUpdated(algoOrdType: AlgoOrderType): AlgoOrder!
+}
