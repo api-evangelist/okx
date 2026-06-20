@@ -2,7 +2,7 @@ name: OKX
 description: Global cryptocurrency exchange providing a comprehensive REST and WebSocket
   API for spot and derivatives trading, account management, market data, funding,
   sub-account operations, block trading, and on-chain wallet services.
-image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
 url: https://raw.githubusercontent.com/api-evangelist/okx/refs/heads/main/apis.yml
 created: '2026-06-13'
 modified: '2026-06-13'
@@ -26,7 +26,7 @@ apis:
   description: REST and WebSocket endpoints for order book trading, algo orders, block
     trading, spread trading, and copy trading across spot, futures, options, and perpetual
     swap instruments.
-  image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
   humanURL: https://www.okx.com/docs-v5/en/
   baseURL: https://openapi.okx.com
   tags:
@@ -47,7 +47,7 @@ apis:
   description: Public REST and WebSocket endpoints delivering real-time and historical
     market data including order books, tickers, candlesticks, trades, funding rates,
     open interest, and trading statistics.
-  image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
   humanURL: https://www.okx.com/docs-v5/en/#market-data
   baseURL: https://openapi.okx.com
   tags:
@@ -62,7 +62,7 @@ apis:
 - name: OKX Account API
   description: Private endpoints for managing trading accounts, viewing balances and
     positions, adjusting leverage, and configuring risk settings.
-  image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
   humanURL: https://www.okx.com/docs-v5/en/#trading-account
   baseURL: https://openapi.okx.com
   tags:
@@ -76,7 +76,7 @@ apis:
 - name: OKX Funding Account API
   description: Endpoints for managing asset deposits, withdrawals, and internal transfers
     between trading and funding accounts.
-  image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
   humanURL: https://www.okx.com/docs-v5/en/#funding-account
   baseURL: https://openapi.okx.com
   tags:
@@ -90,7 +90,7 @@ apis:
 - name: OKX Sub-Account API
   description: Endpoints for creating and managing sub-accounts, transferring assets
     between sub-accounts, and viewing sub-account trading activity.
-  image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
   humanURL: https://www.okx.com/docs-v5/en/#sub-account
   baseURL: https://openapi.okx.com
   tags:
@@ -102,7 +102,7 @@ apis:
 - name: OKX Financial Products API
   description: Endpoints for on-chain earning, staking, simple earn, and lending products
     available through the OKX platform.
-  image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
   humanURL: https://www.okx.com/docs-v5/en/#financial-product
   baseURL: https://openapi.okx.com
   tags:
@@ -117,7 +117,7 @@ apis:
   description: Developer APIs for OKX Web3 wallet integration, including multi-chain
     transaction signing, DEX aggregation across 500+ DEXs on 20+ networks, and on-chain
     account management.
-  image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
   humanURL: https://web3.okx.com/build/dev-docs/wallet-api
   baseURL: https://www.okx.com
   tags:
