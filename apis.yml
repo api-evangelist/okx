@@ -152,7 +152,7 @@ common:
   url: rate-limits/okx-rate-limits.yml
 - type: FinOps
   url: finops/okx-finops.yml
-- type: Changelog
+- type: ChangeLog
   url: https://www.okx.com/docs-v5/log_en/
 - type: Authentication
   url: https://www.okx.com/docs-v5/en/#overview-api-key-creation

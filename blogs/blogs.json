@@ -3,16 +3,19 @@
   "description": "OKX Learn \u2014 educational content covering cryptocurrency, trading, Web3, and blockchain topics published by OKX.",
   "url": "https://www.okx.com/learn",
   "rss": null,
-  "rssChecked": "2026-06-13",
-  "rssNote": "No RSS or Atom feed detected at /learn/rss, /learn/feed, or via page link tags. OKX Learn does not expose a public syndication feed.",
+  "rssChecked": "2026-06-21",
+  "rssNote": "No RSS or Atom feed detected at /learn/feed, /learn/feed/, /learn/rss, or /learn/feed.xml; no feed link tags in page head. HTML listing surfaces article links but exposes no per-post publish dates, so undated evergreen content is not backfilled.",
   "posts": [],
   "repo": "okx",
   "feeds": [
     {
-      "source": "https://www.linkedin.com/company/okxofficial",
-      "error": "HTTPError"
+      "source": "https://www.okx.com/learn",
+      "feed_url": "",
+      "saved": 4,
+      "method": "agent-scrape"
     }
   ],
-  "post_count": 0,
-  "fetched": "2026-06-14T20:42:17Z"
+  "post_count": 4,
+  "fetched": "2026-06-27T12:57:35Z",
+  "agent_pulled": "2026-06-27"
 }
