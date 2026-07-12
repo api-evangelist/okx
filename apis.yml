@@ -130,6 +130,8 @@ apis:
   - type: Documentation
     url: https://web3.okx.com/build/dev-docs/wallet-api
 common:
+- type: DomainSecurity
+  url: security/okx-domain-security.yml
 - type: Website
   url: https://www.okx.com
 - type: Documentation
