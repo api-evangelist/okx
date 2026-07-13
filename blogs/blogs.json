@@ -9,13 +9,14 @@
   "repo": "okx",
   "feeds": [
     {
-      "source": "https://www.okx.com/learn",
-      "feed_url": "",
-      "saved": 4,
-      "method": "agent-scrape"
+      "source": "https://www.linkedin.com/company/okxofficial",
+      "feed_url": "https://www.linkedin.com/company/okxofficial",
+      "title": "",
+      "saved": 0,
+      "method": "none"
     }
   ],
-  "post_count": 4,
-  "fetched": "2026-06-27T12:57:35Z",
-  "agent_pulled": "2026-06-27"
+  "post_count": 7,
+  "fetched": "2026-07-11T11:50:51Z",
+  "agent_pulled": "2026-07-04"
 }
