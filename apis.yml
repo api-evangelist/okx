@@ -32,6 +32,18 @@ tags:
 - Market Data
 - Web3
 - Blockchain
+- Wallets
+tags_raw:
+- Cryptocurrency
+- Exchange
+- Trading
+- Derivatives
+- Spot Trading
+- Futures
+- Options
+- Market Data
+- Web3
+- Blockchain
 - Wallet
 apis:
 - name: OKX Trading API
@@ -42,6 +54,13 @@ apis:
   humanURL: https://www.okx.com/docs-v5/en/
   baseURL: https://openapi.okx.com
   tags:
+  - Trading
+  - Order
+  - Spot
+  - Futures
+  - Options
+  - Perpetuals
+  tags_raw:
   - Trading
   - Orders
   - Spot
@@ -79,6 +98,11 @@ apis:
   baseURL: https://openapi.okx.com
   tags:
   - Account
+  - Balances
+  - Positions
+  - Risk Management
+  tags_raw:
+  - Account
   - Balance
   - Positions
   - Risk Management
@@ -106,6 +130,9 @@ apis:
   humanURL: https://www.okx.com/docs-v5/en/#sub-account
   baseURL: https://openapi.okx.com
   tags:
+  - Subaccounts
+  - Multi-Account
+  tags_raw:
   - Sub-accounts
   - Multi-account
   properties:
@@ -133,6 +160,12 @@ apis:
   humanURL: https://web3.okx.com/build/dev-docs/wallet-api
   baseURL: https://www.okx.com
   tags:
+  - Wallets
+  - Web3
+  - DEX
+  - Multi-Chain
+  - Onchain
+  tags_raw:
   - Wallet
   - Web3
   - DEX
