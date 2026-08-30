@@ -141,8 +141,8 @@ apis:
   humanURL: https://www.okx.com/docs-v5/en/#sub-account
   baseURL: https://openapi.okx.com
   tags:
-  - Subaccounts
-  - Multi-Account
+  - Sub-accounts
+  - Multi-account
   tags_raw:
   - Sub-accounts
   - Multi-account
@@ -174,8 +174,8 @@ apis:
   - Wallets
   - Web3
   - DEX
-  - Multi-Chain
-  - Onchain
+  - Multi-chain
+  - On-chain
   tags_raw:
   - Wallet
   - Web3
