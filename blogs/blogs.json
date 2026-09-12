@@ -1,6 +1,6 @@
 {
   "name": "OKX Blog",
-  "description": "OKX Learn — educational content covering cryptocurrency, trading, Web3, and blockchain topics published by OKX.",
+  "description": "OKX Learn \u2014 educational content covering cryptocurrency, trading, Web3, and blockchain topics published by OKX.",
   "url": "https://www.okx.com/learn",
   "rss": null,
   "rssChecked": "2026-06-21",
@@ -17,7 +17,7 @@
     }
   ],
   "post_count": 7,
-  "fetched": "2026-08-30T22:33:40Z",
+  "fetched": "2026-09-06T19:17:18Z",
   "agent_pulled": "2026-07-04",
   "feed_nature": "undetermined",
   "feed_nature_basis": null,
