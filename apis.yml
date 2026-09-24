@@ -83,8 +83,6 @@ apis:
     url: https://www.okx.com/docs-v5/en/
   - type: OpenAPI
     url: https://www.okx.com/docs-v5/en/
-  - url: graphql/okx-graphql.md
-    type: GraphQL
 - name: OKX Market Data API
   description: Public REST and WebSocket endpoints delivering real-time and historical
     market data including order books, tickers, candlesticks, trades, funding rates,
