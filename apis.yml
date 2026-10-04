@@ -167,7 +167,6 @@ apis:
     account management.
   image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
   humanURL: https://web3.okx.com/build/dev-docs/wallet-api
-  baseURL: https://www.okx.com
   tags:
   - Wallets
   - Web3
