@@ -1,3 +1,7 @@
+# Provenance stamped 2026-10-07 (roadmap#943): written by an API Evangelist sweep (undated — the file carries no date and git cannot supply one), not
+# harvested from the provider. `method: generated` so the economics campaign may replace it with a
+# dated, verbatim transcription; every figure below is unverified until it does.
+method: generated
 name: OKX Plans and Pricing
 description: OKX API access is free to all registered users. Trading fees follow a tiered VIP structure based on 30-day rolling trading volume and OKB token holdings. Specialized programs offer reduced fees and enhanced API access for market makers and brokers.
 specificationVersion: '0.1'
