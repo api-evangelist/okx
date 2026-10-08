@@ -103,3 +103,46 @@ plans:
       - DEX aggregation (500+ DEXs, 20+ chains)
       - On-chain account queries
       - Trial period 60 days
+x-canonical:
+  generated: '2026-10-08'
+  vocabulary: all/0-working/economics/plans-canonical.yml
+  models:
+  - free
+  units: []
+  plans:
+  - name: Standard (Regular)
+    access: other
+    model: free
+    model_how: derived
+    units: []
+    periods: []
+  - name: VIP 1
+    access: other
+    model: unstated
+    model_how: derived
+    units: []
+    periods: []
+  - name: VIP 2–8
+    access: other
+    model: unstated
+    model_how: derived
+    units: []
+    periods: []
+  - name: Market Maker Program
+    access: other
+    model: unstated
+    model_how: derived
+    units: []
+    periods: []
+  - name: Broker Program
+    access: other
+    model: unstated
+    model_how: derived
+    units: []
+    periods: []
+  - name: OKX Wallet API (Trial)
+    access: other
+    model: free
+    model_how: derived
+    units: []
+    periods: []
