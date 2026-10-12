@@ -1,0 +1,66 @@
+edges:
+- partner_name: CCXT
+  partner: null
+  partner_match: null
+  type: coverage
+  channel: open-source-node
+  relationship: connector-coverage
+  direction: partner-built
+  evidence: https://github.com/ccxt/ccxt/blob/master/ts/src/myokx.ts
+  ccxt_id: myokx
+  ccxt_certified: false
+  ccxt_pro: true
+  matched_by: domain:okx.com
+  partner_gap: no ccxt repo in all/* (catalog gap)
+  detected_by: sweep-crypto.py
+  first_seen: '2026-10-13'
+- partner_name: CoinGecko
+  partner: coingecko
+  partner_match: aggregator
+  channel: partner-built
+  direction: partner-built
+  type: coverage
+  relationship: connector-coverage
+  evidence: https://api.coingecko.com/api/v3/exchanges/okex
+  matched_by: domain:okx.com
+  coingecko_id: okex
+  trust_score: 10
+  detected_by: sweep-crypto.py
+  first_seen: '2026-10-13'
+- partner_name: MiCA (EU)
+  partner: null
+  type: contract
+  channel: regulator-register
+  relationship: standard-participant
+  direction: partner-built
+  evidence: https://www.esma.europa.eu/sites/default/files/2024-12/CASPS.csv
+  contract_reference:
+    register: 'ESMA interim MiCA register: crypto-asset service providers (CASPS.csv)'
+    spec_file: null
+    role: authorised-casp
+    registered_name: OKX Europe Limited
+    register_id: 54930069NLWEIGLHXU42
+    competent_authority: Malta Financial Services Authority (MFSA)
+    home_member_state: MT
+    authorised: 27/01/2025
+    services:
+    - "a.\tproviding custody and administration of crypto-assets on behalf of clients"
+    - b. operation of a trading platform for crypto-assets
+    - c. exchange of crypto-assets for funds
+    - d. exchange of crypto-assets for other crypto-assets
+    - "e.\texecution of orders for crypto-assets on behalf of clients"
+    - "f.\tplacing of crypto-assets"
+    - g. reception and transmission of orders for crypto-assets on behalf of clients
+    - "i.\tproviding portfolio management on crypto-assets"
+    - j. providing transfer services for crypto-assets on behalf of clients.
+    matched_domain: okx.com
+    detected_by: sweep-crypto.py
+    detected: '2026-10-13'
+  detected_by: sweep-crypto.py
+  first_seen: '2026-10-13'
+generated: '2026-10-13'
+method: searched
+checked:
+- https://api.coingecko.com/api/v3/exchanges
+- https://raw.githubusercontent.com/ccxt/ccxt/master/exchanges.json
+- https://www.esma.europa.eu/sites/default/files/2024-12/CASPS.csv
