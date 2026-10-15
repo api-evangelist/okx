@@ -58,9 +58,42 @@ edges:
     detected: '2026-10-14'
   detected_by: sweep-crypto.py
   first_seen: '2026-10-14'
+- partner_name: ISO 10383 (MIC)
+  partner: null
+  type: register
+  channel: standard-directory
+  relationship: standard-participant
+  direction: partner-built
+  evidence: https://www.iso20022.org/sites/default/files/ISO10383_MIC/ISO10383_MIC.csv
+  source: mic
+  category: registered trading venues and market segments
+  contract_reference:
+    register: ISO 10383 Market Identifier Codes (ISO 20022 registration authority)
+    spec_file: null
+    standard: ISO 10383
+    role: venue operator
+    matched_domain: okx.com
+    matched_by: domain:okx.com
+    categories:
+    - CASP
+    operating_mics:
+    - OKXE
+    mics:
+    - mic: OKXE
+      operating_mic: OKXE
+      segment: OPRT
+      market: OKX EUROPE
+      category: CASP
+      legal_name: OKX EUROPE LIMITED
+      country: MT
+    detected_by: sweep-capital-markets.py
+    detected: '2026-10-15'
+  detected_by: sweep-capital-markets.py
+  first_seen: '2026-10-15'
 generated: '2026-10-13'
 method: searched
 checked:
 - https://api.coingecko.com/api/v3/exchanges
 - https://raw.githubusercontent.com/ccxt/ccxt/master/exchanges.json
 - https://www.esma.europa.eu/sites/default/files/2024-12/CASPS.csv
+- https://www.iso20022.org/sites/default/files/ISO10383_MIC/ISO10383_MIC.csv
