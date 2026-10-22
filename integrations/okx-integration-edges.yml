@@ -124,6 +124,78 @@ edges:
     detected: '2026-10-20'
   detected_by: sweep-compliance-assurance.py
   first_seen: '2026-10-20'
+- partner_name: EBA Payment Institutions Register (PSD2 / EMD2)
+  partner: null
+  partner_match: register-name
+  type: register
+  channel: regulator-register
+  relationship: standard-participant
+  direction: partner-built
+  evidence: https://euclid.eba.europa.eu/register/pir/search
+  category: EU/EEA PSD2 payment / e-money authorisation
+  contract_reference:
+    register: EBA Payment Institutions Register (PSD2 / EMD2)
+    spec_file: null
+    standard: null
+    role: authorised-payment-or-e-money-institution
+    registrations:
+    - registered_name: OKX Europe Limited
+      licences:
+      - payment institution
+      register_country: MT
+      register_id: MT_MFSA!IOEUR
+      matched_domain: null
+      matched_by: register-name
+      authorised: '2026-02-11'
+      competent_authority: MT_MFSA
+      national_ref: C 88193
+      home_services:
+      - PS_010
+      - PS_020
+      - PS_03A
+      - PS_03B
+      - PS_03C
+      passports:
+      - AT
+      - BE
+      - BG
+      - CY
+      - CZ
+      - DE
+      - DK
+      - EE
+      - ES
+      - FI
+      - FR
+      - GR
+      - HR
+      - HU
+      - IE
+      - IS
+      - IT
+      - LI
+      - LT
+      - LU
+      - LV
+      - NL
+      - 'NO'
+      - PL
+      - PT
+      - RO
+      - SE
+      - SI
+      - SK
+      register_name_note: register-name 'okx' = okx; wikidata P856 okx.com agrees or unheld
+    matched_by: register-name
+    signal_note: 'participation only: a regulator authorisation / registration and its PSD2 passports (host countries);
+      no API conformance is published by this register'
+    detected_by: sweep-eu-psd2-payment-institutions.py
+    detected: '2026-10-21'
+    identity_source: register-name
+    identity_note: register gave only the name; exact normalised match to the repo's apis.yml name, one repo, Wikidata
+      P856 not contradicting (Kin 2026-10-20 decision 2)
+  detected_by: sweep-eu-psd2-payment-institutions.py
+  first_seen: '2026-10-21'
 generated: '2026-10-13'
 method: searched
 checked:
@@ -133,6 +205,9 @@ checked:
 - https://raw.githubusercontent.com/ccxt/ccxt/master/exchanges.json
 - https://www.esma.europa.eu/sites/default/files/2024-12/CASPS.csv
 - https://www.iso20022.org/sites/default/files/ISO10383_MIC/ISO10383_MIC.csv
+- https://euclid.eba.europa.eu/register/api/filemetadata
+- https://euclid.eba.europa.eu/register/cir/search
+- https://euclid.eba.europa.eu/register/pir/search
 source:
 - https://cloudsecurityalliance.org/star/registry
 - https://eucoc.cloud/en/public-register/list-of-adherent-services
