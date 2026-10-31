@@ -1,4 +1,4 @@
-# OKX (okx)
+# OKX
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -64,8 +64,124 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-OKX is a global cryptocurrency exchange providing a comprehensive REST and WebSocket API for spot and derivatives trading, account management, market data, funding, sub-account operations, block trading, and on-chain wallet services.
+Global cryptocurrency exchange providing a comprehensive REST and WebSocket API for spot and derivatives trading, account management, market data, funding, sub-account operations, block trading, and on-chain wallet services.
 
-APIs.json: https://raw.githubusercontent.com/api-evangelist/okx/refs/heads/main/apis.yml
+**Areas:** Cryptocurrency · Exchange · Trading · Derivatives · Spot Trading · Futures · Options · Market Data · Web3 · Blockchain · Wallets
 
-Naftiko: https://github.com/naftiko/fleet?utm_source=api-evangelist&utm_medium=readme&utm_campaign=okx-api-evangelist&utm_content=repo
+## OKX on APIs.io
+
+Everything profiled for OKX is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/okx/](https://apis.io/providers/okx/)** — or go straight to one of the APIs or properties below.
+
+### APIs (7)
+
+- [OKX Trading API](https://apis.io/apis/okx/okx-trading-api/) — REST and WebSocket endpoints for order book trading, algo orders, block trading, spread trading, and copy trading across spot, futures, options, and…
+- [OKX Market Data API](https://apis.io/apis/okx/okx-market-data-api/) — Public REST and WebSocket endpoints delivering real-time and historical market data including order books, tickers, candlesticks, trades, funding rates,…
+- [OKX Account API](https://apis.io/apis/okx/okx-account-api/) — Private endpoints for managing trading accounts, viewing balances and positions, adjusting leverage, and configuring risk settings.
+- [OKX Funding Account API](https://apis.io/apis/okx/okx-funding-account-api/) — Endpoints for managing asset deposits, withdrawals, and internal transfers between trading and funding accounts.
+- [OKX Sub-Account API](https://apis.io/apis/okx/okx-sub-account-api/) — Endpoints for creating and managing sub-accounts, transferring assets between sub-accounts, and viewing sub-account trading activity.
+- [OKX Financial Products API](https://apis.io/apis/okx/okx-financial-products-api/) — Endpoints for on-chain earning, staking, simple earn, and lending products available through the OKX platform.
+- [OKX Wallet API (Onchain OS)](https://apis.io/apis/okx/okx-wallet-api-onchain-os/) — Developer APIs for OKX Web3 wallet integration, including multi-chain transaction signing, DEX aggregation across 500+ DEXs on 20+ networks, and on-chain…
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### GraphQL (1)
+
+GraphQL schemas.
+
+- [Moved to /providers/okx/](https://apis.io/graphqls/okx/okx-graphql/)
+
+#### JSON-LD (1)
+
+Linked-data contexts for the provider's vocabulary.
+
+- [Okx Context](https://apis.io/jsonld/okx/okx-context/)
+
+#### Security (1)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Okx Domain Security](https://apis.io/security/okx/okx-domain-security/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Okx Plans Pricing](https://apis.io/plans/okx/okx-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Okx Rate Limits](https://apis.io/rate-limits/okx/okx-rate-limits/)
+
+#### FinOps (1)
+
+What the API costs to run, by operation.
+
+- [Okx Finops](https://apis.io/finops/okx/okx-finops/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://www.okx.com)
+- [Documentation](https://www.okx.com/docs-v5/en/)
+- [Pricing](https://www.okx.com/fees)
+- [Changelog](https://www.okx.com/docs-v5/log_en/)
+- [Blog](https://www.okx.com/learn)
+- [Status](https://www.okx.com/status)
+
+## API Evangelist rating
+
+**Kin Score 30.3** — thin · rubric 0.24.0 · scored 2026-10-17
+
+| Facet | Score |
+|---|---|
+| Discoverability | 62.5 |
+| Contract quality | 38.7 |
+| Contract governance | 0.0 |
+| Operational transparency | 44.7 |
+| Developer ergonomics | 23.8 |
+| Access clarity | 18.4 |
+
+**Agent readiness 16.1** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | — |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | — |
+| OpenAPI Examples | — |
+| Rate Limit Signal | derived (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | — |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+
+**Regulatory alignment 21.3** — Securities & Market Data
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/okx/](https://apis.io/providers/okx/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for OKX: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/okx/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
